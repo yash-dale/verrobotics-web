@@ -53,6 +53,7 @@ export class WaterFx {
   private ctx: CanvasRenderingContext2D;
   private W = 0;
   private CH = 0;
+  private dpr = 1;
   private xs = new Float32Array(0);
   private drops: Drop[] = [];
   private puffs: Puff[] = [];
@@ -64,9 +65,10 @@ export class WaterFx {
     this.ctx = canvas.getContext("2d")!;
   }
 
-  setSize(W: number, CH: number) {
+  setSize(W: number, CH: number, dpr = 1) {
     this.W = W;
     this.CH = CH;
+    this.dpr = dpr;
     this.xs = new Float32Array(Math.ceil(CH / 4) + 2);
   }
 
@@ -81,7 +83,12 @@ export class WaterFx {
     this.rivs.length = 0;
     this.lastP = -1;
     this.spawnAcc = 0;
-    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    // wipe the whole backing store, then go back to CSS-pixel units (dropping the dpr scale here
+    // made every later frame draw at 1/dpr size on high-density screens)
+    const { ctx, dpr } = this;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   /**
@@ -90,6 +97,7 @@ export class WaterFx {
   draw(p: number, t: number, dt: number, rowH: number, live: boolean) {
     const { ctx, W, CH } = this;
     const sp = makeSprites();
+    ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
     ctx.clearRect(0, 0, W, CH);
 
     const rows = Math.ceil(CH / rowH);

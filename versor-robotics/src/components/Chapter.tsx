@@ -79,8 +79,7 @@ export default function Chapter({ id, prev, bg, fg = "#f3e9d8", dot = "rgba(255,
         canvas.width = Math.round(W * dpr);
         canvas.height = Math.round(CH * dpr);
         canvas.style.height = `${CH}px`;
-        canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
-        fx.setSize(W, CH);
+        fx.setSize(W, CH, dpr);
       }
       setClip(washProgress(track.getBoundingClientRect().top, vh), performance.now() / 1000);
     };
@@ -103,12 +102,10 @@ export default function Chapter({ id, prev, bg, fg = "#f3e9d8", dot = "rgba(255,
         fx.draw(1, t, dt, rowH, false);
         if (linger <= 0 && !fx.busy) {
           fx.reset();
-          canvas.getContext("2d")?.clearRect(0, 0, W, CH);
           return;
         }
       } else {
         fx.reset();
-        canvas.getContext("2d")?.clearRect(0, 0, W, CH);
         return; // idle: restarted by the next scroll
       }
       raf = requestAnimationFrame(frame);
