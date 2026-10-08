@@ -1,0 +1,48 @@
+.strip {
+  position: relative;
+  overflow: hidden;
+  background: var(--tomato);
+  color: var(--cream);
+  border-block: 3px solid var(--amber);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 55s linear infinite;
+}
+
+.row {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  padding: 14px 28px 14px 0;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.icon {
+  flex: none;
+  color: var(--amber);
+}
+
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

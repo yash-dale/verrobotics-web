@@ -1,0 +1,329 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Sprout } from "lucide-react";
+import Chapter from "./Chapter";
+import styles from "./Game.module.css";
+import { FieldRun, GAME_H, GAME_W, type Hud, type Phase } from "@/lib/fieldRun";
+import { C } from "@/lib/palette";
+
+const pad = (n: number) => String(Math.max(0, Math.floor(n))).padStart(5, "0");
+
+/**
+ * FIELD RUN: the arcade cabinet at the bottom of the page.
+ * Keys only steer the game while it is on screen and being played, so typing in the contact form is never hijacked.
+ */
+export default function Game() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const gameRef = useRef<FieldRun | null>(null);
+  const scoreRef = useRef<HTMLSpanElement>(null);
+  const bestRef = useRef<HTMLSpanElement>(null);
+  const seedsRef = useRef<HTMLSpanElement>(null);
+  const speedRef = useRef<HTMLSpanElement>(null);
+  const hudRef = useRef<Hud>({ score: 0, best: 0, speed: 0, seeds: 0 });
+  const [phase, setPhase] = useState<Phase>("ready");
+  const [coarse, setCoarse] = useState(false);
+  const [result, setResult] = useState({ score: 0, best: 0, fresh: false });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    setCoarse(window.matchMedia("(pointer: coarse)").matches);
+    let prevBest = 0;
+    const game = new FieldRun(canvas, {
+      onPhase: (p) => {
+        setPhase(p);
+        if (p === "crashed") {
+          const h = hudRef.current;
+          setResult({ score: h.score, best: h.best, fresh: h.score > 0 && h.score >= h.best && h.best > prevBest });
+          prevBest = h.best;
+        }
+      },
+      onHud: (h) => {
+        hudRef.current = h;
+        if (scoreRef.current) scoreRef.current.textContent = pad(h.score);
+        if (bestRef.current) bestRef.current.textContent = pad(h.best);
+        if (seedsRef.current) seedsRef.current.textContent = String(h.seeds);
+        if (speedRef.current) speedRef.current.style.width = `${Math.round(8 + h.speed * 92)}%`;
+      },
+    });
+    prevBest = hudRef.current.best;
+    gameRef.current = game;
+
+    const fit = () => {
+      const r = canvas.getBoundingClientRect();
+      if (r.width > 0) game.resize(r.width, Math.min(window.devicePixelRatio || 1, 2));
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(canvas);
+
+    // run only while the cabinet is on screen
+    let raf = 0;
+    let last = 0;
+    let active = false; // mostly in view: keys steer the game
+    const loop = (now: number) => {
+      raf = requestAnimationFrame(loop);
+      const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
+      last = now;
+      game.frame(dt);
+    };
+    const io = new IntersectionObserver(
+      ([e]) => {
+        active = e.intersectionRatio >= 0.45;
+        if (e.isIntersecting) {
+          if (!raf) {
+            last = performance.now();
+            raf = requestAnimationFrame(loop);
+          }
+        } else if (raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+        if (e.intersectionRatio < 0.3) game.pause();
+      },
+      { threshold: [0, 0.3, 0.45, 0.7] },
+    );
+    io.observe(canvas);
+
+    const typing = (t: EventTarget | null) => {
+      const el = t as HTMLElement | null;
+      return !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!active || e.ctrlKey || e.metaKey || e.altKey || typing(e.target)) return;
+      const k = e.key.toLowerCase();
+      if (k === "enter") {
+        const t = e.target as HTMLElement | null;
+        if (t && /^(BUTTON|A)$/.test(t.tagName)) return; // let a focused button/link do its own thing
+        if (game.phase !== "playing") {
+          e.preventDefault();
+          game.primary();
+        }
+        return;
+      }
+      if (game.phase !== "playing") return;
+      switch (k) {
+        case "arrowup":
+        case "w":
+          e.preventDefault();
+          if (!e.repeat) game.changeLane(-1);
+          break;
+        case "arrowdown":
+        case "s":
+          e.preventDefault();
+          if (!e.repeat) game.changeLane(1);
+          break;
+        case "arrowright":
+        case "d":
+          e.preventDefault();
+          game.setBoost(1);
+          break;
+        case "arrowleft":
+        case "a":
+          e.preventDefault();
+          game.setBoost(-1);
+          break;
+        case "p":
+        case "escape":
+          game.pause();
+          break;
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase();
+      if (k === "arrowright" || k === "d" || k === "arrowleft" || k === "a") game.setBoost(0);
+    };
+    const onBlur = () => {
+      game.setBoost(0);
+      game.pause();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onBlur);
+
+    // swipe up / down on the screen (touch) to change lane
+    let sx = 0;
+    let sy = 0;
+    const onPointerDown = (e: PointerEvent) => {
+      sx = e.clientX;
+      sy = e.clientY;
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (game.phase !== "playing") return;
+      const dx = e.clientX - sx;
+      const dy = e.clientY - sy;
+      if (Math.abs(dy) > 24 && Math.abs(dy) > Math.abs(dx)) game.changeLane(dy < 0 ? -1 : 1);
+      else if (e.pointerType === "touch") {
+        const r = canvas.getBoundingClientRect();
+        game.changeLane(e.clientY < r.top + r.height / 2 ? -1 : 1);
+      }
+    };
+    canvas.addEventListener("pointerdown", onPointerDown);
+    canvas.addEventListener("pointerup", onPointerUp);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ro.disconnect();
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onBlur);
+      canvas.removeEventListener("pointerdown", onPointerDown);
+      canvas.removeEventListener("pointerup", onPointerUp);
+      gameRef.current = null;
+    };
+  }, []);
+
+  const go = () => gameRef.current?.primary();
+  const hold = (b: -1 | 0 | 1) => () => gameRef.current?.setBoost(b);
+  const lane = (d: -1 | 1) => () => gameRef.current?.changeLane(d);
+
+  return (
+    <Chapter id="play" prev={C.ink} bg={C.steel} dot="rgba(0,0,0,0.08)">
+      <div className="container">
+        <div className={styles.head}>
+          <p className="kicker">07 / Play</p>
+          <h2 className="title" style={{ fontSize: "clamp(2.1rem, 5vw, 3.9rem)" }}>
+            Field run<span className="dot">.</span>
+          </h2>
+        </div>
+
+        <div className={styles.cabinet} data-rover-avoid="">
+          <div className={styles.marquee} aria-hidden="true">
+            <span>Player 1</span>
+            <strong>Versor field run</strong>
+            <span>Insert seed</span>
+          </div>
+
+          <div className={styles.screen}>
+            <canvas
+              ref={canvasRef}
+              className={`${styles.canvas} ${phase === "playing" ? styles.live : ""}`}
+              width={GAME_W}
+              height={GAME_H}
+              role="img"
+              aria-label="Field Run: a side-on game where the Versor rover changes lanes to dodge weeds and rocks and collect seeds."
+            />
+
+            <div className={styles.hud} aria-live="off">
+              <div className={styles.stat}>
+                <span className={styles.label}>Score</span>
+                <span ref={scoreRef} className={styles.value}>
+                  00000
+                </span>
+              </div>
+              <div className={styles.stat}>
+                <span className={styles.label}>
+                  <Sprout size={13} aria-hidden="true" /> Seeds
+                </span>
+                <span ref={seedsRef} className={styles.value}>
+                  0
+                </span>
+              </div>
+              <div className={`${styles.stat} ${styles.right}`}>
+                <span className={styles.label}>Best</span>
+                <span ref={bestRef} className={styles.value}>
+                  00000
+                </span>
+              </div>
+            </div>
+            <div className={styles.speed} aria-hidden="true">
+              <span className={styles.label}>Speed</span>
+              <i>
+                <span ref={speedRef} />
+              </i>
+            </div>
+
+            {phase !== "playing" ? (
+              <div className={`${styles.overlay} ${phase === "crashed" ? styles.dock : ""}`}>
+                <div className={styles.card} role="dialog" aria-label={phase === "crashed" ? "Crashed" : phase === "paused" ? "Paused" : "Field Run"}>
+                  {phase === "ready" ? (
+                    <>
+                      <p className={styles.cardKicker}>Arcade mode</p>
+                      <h3>Field run</h3>
+                      <p>Change lanes to dodge weeds, rocks, stumps and hay bales. Scoop up seeds. Don&rsquo;t crash.</p>
+                    </>
+                  ) : null}
+                  {phase === "crashed" ? (
+                    <>
+                      <p className={`${styles.cardKicker} ${styles.bad}`}>Rover down</p>
+                      <h3>Crashed!</h3>
+                      <p className={styles.result}>
+                        Score <b>{pad(result.score)}</b> &middot; Best <b>{pad(result.best)}</b>
+                      </p>
+                      {result.fresh ? <p className={styles.fresh}>New best!</p> : null}
+                    </>
+                  ) : null}
+                  {phase === "paused" ? (
+                    <>
+                      <p className={styles.cardKicker}>Hold on</p>
+                      <h3>Paused</h3>
+                    </>
+                  ) : null}
+                  <button type="button" className="btn btn--amber" onClick={go}>
+                    {phase === "ready"
+                      ? coarse
+                        ? "Tap to start"
+                        : "Press Enter to start"
+                      : phase === "paused"
+                        ? coarse
+                          ? "Tap to resume"
+                          : "Press Enter to resume"
+                        : coarse
+                          ? "Tap to go again"
+                          : "Press Enter to go again"}
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {/* on-screen controls for touch devices */}
+          <div className={styles.touch} aria-hidden="true">
+            <div>
+              <button type="button" onPointerDown={lane(-1)} tabIndex={-1}>
+                <ArrowUp size={22} />
+              </button>
+              <button type="button" onPointerDown={lane(1)} tabIndex={-1}>
+                <ArrowDown size={22} />
+              </button>
+            </div>
+            <div>
+              <button type="button" onPointerDown={hold(-1)} onPointerUp={hold(0)} onPointerLeave={hold(0)} onPointerCancel={hold(0)} tabIndex={-1}>
+                <ArrowLeft size={22} />
+              </button>
+              <button type="button" onPointerDown={hold(1)} onPointerUp={hold(0)} onPointerLeave={hold(0)} onPointerCancel={hold(0)} tabIndex={-1}>
+                <ArrowRight size={22} />
+              </button>
+            </div>
+          </div>
+
+          <ul className={styles.keys} aria-label="Controls">
+            <li>
+              <kbd>W</kbd>
+              <kbd>&uarr;</kbd> lane up
+            </li>
+            <li>
+              <kbd>S</kbd>
+              <kbd>&darr;</kbd> lane down
+            </li>
+            <li>
+              <kbd>D</kbd>
+              <kbd>&rarr;</kbd> boost
+            </li>
+            <li>
+              <kbd>A</kbd>
+              <kbd>&larr;</kbd> brake
+            </li>
+            <li>
+              <kbd className={styles.wide}>Enter</kbd> start / restart
+            </li>
+          </ul>
+        </div>
+        <p className={styles.rotate}>Tip: turn your phone sideways for a bigger field.</p>
+      </div>
+    </Chapter>
+  );
+}

@@ -1,0 +1,106 @@
+.chapter {
+  position: relative;
+}
+
+/* The track holds the stage plus a runway: 70svh of scrolling during which the stage stays stuck.
+   (The runway must be in the track's content box. Padding would not let a sticky child move.) */
+.track {
+  position: relative;
+}
+
+.runway {
+  height: 70vh;
+  height: 70svh;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--prev);
+  isolation: isolate;
+}
+
+.prev {
+  position: absolute;
+  inset: 0;
+  background: var(--prev);
+  z-index: 0;
+}
+
+.next {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + clamp(32px, 6vh, 72px)) 0 clamp(56px, 9vh, 96px);
+  background: var(--bg);
+  color: var(--fg);
+  overflow: clip;
+  will-change: clip-path;
+}
+
+/* short screens (a phone held sideways): don't waste height on padding */
+@media (max-height: 520px) {
+  .next {
+    padding-top: calc(var(--header-h) + 10px);
+    padding-bottom: 20px;
+  }
+}
+
+/* subtle dot texture */
+.next::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--dot) 1px, transparent 1.6px);
+  background-size: 6px 6px;
+  pointer-events: none;
+}
+
+.next > * {
+  position: relative;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* nav target: sits where the wash has finished */
+.anchor {
+  position: absolute;
+  top: 60vh;
+  top: 60svh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runway {
+    display: none;
+  }
+
+  .stage {
+    position: relative;
+  }
+
+  .canvas {
+    display: none;
+  }
+
+  .anchor {
+    top: 0;
+  }
+}

@@ -1,0 +1,115 @@
+/* retro sunburst rising from the top-right corner */
+/* static: a rotating full-bleed gradient is expensive to repaint, and the wash is the star here */
+.rays {
+  position: absolute !important;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-conic-gradient(from 180deg at 92% -6%, rgba(0, 0, 0, 0.07) 0 5deg, transparent 5deg 10deg);
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 6vh, 64px);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.ink {
+  color: var(--ink);
+}
+
+.lede {
+  color: var(--cream);
+  max-width: 54ch;
+}
+
+.unit {
+  flex: none;
+  width: clamp(150px, 17vw, 210px);
+  margin: 0;
+  padding: 22px 18px 14px;
+  text-align: center;
+  background: var(--cream);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  transform: rotate(2.5deg);
+}
+
+.unitBot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.unit figcaption {
+  margin-top: 14px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2.4vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cardWrap {
+  height: 100%;
+}
+
+.card {
+  height: 100%;
+  padding: 24px 24px 26px;
+  color: var(--ink);
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+.icon {
+  color: var(--tomato);
+}
+
+.card h3 {
+  margin: 14px 0 10px;
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.card p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(19, 31, 29, 0.78);
+}
+
+@media (max-width: 900px) {
+  .head {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .unit {
+    width: 150px;
+  }
+
+  .values {
+    grid-template-columns: 1fr;
+  }
+}

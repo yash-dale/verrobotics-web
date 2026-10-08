@@ -1,0 +1,57 @@
+.footer {
+  background: var(--ink);
+  border-top: 3px solid var(--amber);
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 40px;
+  padding-block: 32px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.bot {
+  width: 44px;
+  height: auto;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.links a {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--cream-70);
+}
+
+.links a:hover {
+  color: var(--amber);
+}
+
+.copy {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 13px;
+  color: var(--cream-50);
+}
