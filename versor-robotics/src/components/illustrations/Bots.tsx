@@ -90,49 +90,65 @@ const berry = (cx: number, cy: number, r = 8) => (
   </g>
 );
 
-/** Harvesting robot: tracked body, crate of fruit, soft-grip arm. */
-export function HarvesterBot({ className, title = "Harvesting robot" }: BotProps) {
+/**
+ * Collaborative mobile robot, side view facing right: a low wheeled carrier with a crate on its deck
+ * and a touch handle at the back that the operator holds to guide it.
+ */
+export function CarrierBot({ className, title = "Collaborative mobile robot" }: BotProps) {
   return (
     <svg viewBox="0 0 220 150" className={className} role="img" aria-label={title}>
-      <ellipse cx="100" cy="146" rx="80" ry="4" fill="rgba(0,0,0,0.28)" />
+      <ellipse cx="108" cy="146" rx="86" ry="4" fill="rgba(0,0,0,0.28)" />
 
-      {/* tracks */}
-      <rect x="26" y="108" width="148" height="34" rx="17" fill={C.ink} />
-      {[50, 100, 150].map((cx) => (
+      {/* far-side wheels peeking out behind the near ones */}
+      {[66, 158].map((cx) => (
+        <circle key={`far${cx}`} cx={cx} cy="121" r="15" fill="#0b1413" />
+      ))}
+
+      {/* touch handle: a curved bar rising from the rear, grip on top, pulses where the hand goes */}
+      <path d="M48 98L36 52Q33 42 23 42H17" fill="none" stroke={C.ink} strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M48 98L36 52Q33 42 23 42H17" fill="none" stroke={C.steel} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="11" y="35.5" width="24" height="13" rx="6.5" fill={C.tomato} {...stroke} strokeWidth="3" />
+      <path d="M17 39.5v5M23 39.5v5M29 39.5v5" stroke={C.ink} strokeWidth="1.8" opacity="0.55" />
+      <g className="rv-fan" fill="none" stroke={C.amber} strokeWidth="2.4" strokeLinecap="round">
+        <path d="M14 27q9-6 18 0" />
+        <path d="M9 21q14-9 28 0" opacity="0.6" />
+      </g>
+
+      {/* antenna + beacon over the front sensor */}
+      <line x1="170" y1="93" x2="170" y2="82" {...stroke} strokeWidth="2.6" />
+      <circle className="rv-beacon" cx="170" cy="79" r="3.8" fill={C.amber} {...stroke} strokeWidth="2.2" />
+
+      {/* produce peeking over the crate, then the crate itself */}
+      {berry(88, 55)}
+      {berry(105, 51, 8.5)}
+      {berry(122, 55)}
+      <rect x="68" y="57" width="76" height="36" rx="3.5" fill={C.amber} {...stroke} strokeWidth="3" />
+      <path d="M68 69H144M68 81H144" stroke={C.ink} strokeWidth="2" opacity="0.5" />
+      <path d="M80 59V91M132 59V91" stroke={C.ink} strokeWidth="2" opacity="0.35" />
+      <rect x="97" y="62" width="18" height="5" rx="2.5" fill={C.ink} opacity="0.75" />
+
+      {/* low chassis: cream deck plate on a green body */}
+      <rect x="32" y="91" width="150" height="9" rx="4.5" fill={C.cream} {...stroke} strokeWidth="3" />
+      <rect x="26" y="98" width="160" height="28" rx="11" fill={C.sprout} {...stroke} strokeWidth="3.5" />
+      <rect x="38" y="114" width="64" height="5" rx="2.5" fill={C.sproutDark} />
+
+      {/* front sensor face and rear lamp */}
+      <rect x="158" y="103" width="22" height="14" rx="5" fill={C.ink} />
+      <circle cx="165" cy="110" r="2.4" fill={C.cream} />
+      <circle cx="173" cy="110" r="2.4" fill={C.cream} />
+      <rect x="23" y="103" width="5" height="8" rx="2" fill="#ff6a45" {...stroke} strokeWidth="1.6" />
+
+      {/* near-side wheels */}
+      {[58, 150].map((cx) => (
         <g key={cx}>
-          <circle cx={cx} cy="125" r="11" fill={C.steel} stroke={C.ink} strokeWidth="2.5" />
-          <g className="rv-wheel" style={{ transformOrigin: `${cx}px 125px` }}>
-            <path d={`M${cx} 118V132M${cx - 7} 125H${cx + 7}`} stroke={C.ink} strokeWidth="2.4" strokeLinecap="round" />
+          <circle cx={cx} cy="126" r="17" fill={C.ink} />
+          <g className="rv-wheel" style={{ transformOrigin: `${cx}px 126px` }}>
+            <circle cx={cx} cy="126" r="9.5" fill={C.steel} />
+            <path d={`M${cx} 117.5V134.5M${cx - 8.5} 126H${cx + 8.5}`} stroke={C.ink} strokeWidth="2.4" strokeLinecap="round" />
+            <circle cx={cx} cy="126" r="2.6" fill={C.amber} />
           </g>
         </g>
       ))}
-
-      {/* body */}
-      <rect x="30" y="66" width="140" height="46" rx="10" fill={C.sprout} {...stroke} strokeWidth="3.5" />
-      <rect x="40" y="97" width="50" height="6" rx="3" fill={C.sproutDark} />
-      <rect x="104" y="78" width="52" height="22" rx="6" fill={C.ink} />
-      <rect x="112" y="85" width="12" height="8" rx="2" fill={C.cream} />
-      <rect x="134" y="85" width="12" height="8" rx="2" fill={C.cream} />
-
-      {/* crate + fruit */}
-      {berry(52, 44)}
-      {berry(68, 40, 8.5)}
-      {berry(85, 44)}
-      <rect x="38" y="46" width="62" height="22" rx="3" fill={C.amber} {...stroke} strokeWidth="3" />
-      <path d="M38 54H100M38 61H100" stroke={C.ink} strokeWidth="2" opacity="0.5" />
-
-      {/* arm */}
-      <rect x="140" y="58" width="22" height="10" rx="3" fill={C.steel} {...stroke} strokeWidth="3" />
-      <g className="rv-arm">
-        <path d="M151 58L180 28" stroke={C.ink} strokeWidth="12" strokeLinecap="round" />
-        <path d="M151 58L180 28" stroke={C.steel} strokeWidth="5.5" strokeLinecap="round" />
-        <path d="M180 28L200 56" stroke={C.ink} strokeWidth="12" strokeLinecap="round" />
-        <path d="M180 28L200 56" stroke={C.steel} strokeWidth="5.5" strokeLinecap="round" />
-        <circle cx="151" cy="58" r="7" fill={C.amber} {...stroke} strokeWidth="2.5" />
-        <circle cx="180" cy="28" r="6.5" fill={C.amber} {...stroke} strokeWidth="2.5" />
-        <path d="M200 58q-9 8-5 19M200 58q11 5 7 19" fill="none" stroke={C.ink} strokeWidth="6" strokeLinecap="round" />
-        {berry(201, 79)}
-      </g>
     </svg>
   );
 }

@@ -5,7 +5,7 @@ import { Mail, MapPin, Phone, Send } from "lucide-react";
 import Chapter from "./Chapter";
 import styles from "./Contact.module.css";
 import { C } from "@/lib/palette";
-import { site } from "@/lib/site";
+import { products, site } from "@/lib/site";
 
 type Status = "idle" | "sending" | "sent" | "mailto" | "error";
 
@@ -106,8 +106,9 @@ export default function Contact() {
             <label>
               <span>I&rsquo;m interested in</span>
               <select name="interest" defaultValue="Both robots">
-                <option>Harvesting robot</option>
-                <option>Spraying robot</option>
+                {products.map((p) => (
+                  <option key={p.id}>{p.kind}</option>
+                ))}
                 <option>Both robots</option>
                 <option>Something else</option>
               </select>

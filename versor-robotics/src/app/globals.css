@@ -207,15 +207,6 @@ a {
   }
 }
 
-@keyframes rv-arm {
-  from {
-    transform: rotate(-5deg);
-  }
-  to {
-    transform: rotate(6deg);
-  }
-}
-
 @keyframes rv-fan {
   0%,
   100% {
@@ -263,11 +254,6 @@ a {
   animation: rv-blink 1.6s steps(1, end) infinite;
 }
 
-.rv-arm {
-  animation: rv-arm 2.6s ease-in-out infinite alternate;
-  transform-origin: 151px 58px;
-}
-
 .rv-fan {
   animation: rv-fan 1.4s ease-in-out infinite;
 }
@@ -293,7 +279,6 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .rv-beacon,
-  .rv-arm,
   .rv-fan,
   .rv-drop,
   .rv-sway,

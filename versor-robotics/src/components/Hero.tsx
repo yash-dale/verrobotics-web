@@ -1,5 +1,5 @@
 import styles from "./Hero.module.css";
-import { HarvesterBot, SprayerBot, SproutIcon } from "./illustrations/Bots";
+import { CarrierBot, SprayerBot, SproutIcon } from "./illustrations/Bots";
 import Marquee from "./Marquee";
 
 const VERSOR = "VERSOR".split("");
@@ -56,7 +56,7 @@ export default function Hero() {
 
       <div className={styles.fleet} aria-hidden="true">
         <div className={`${styles.bot} rv-hover`} style={{ ["--d" as string]: "0s" }}>
-          <HarvesterBot className={styles.botSvg} title="" />
+          <CarrierBot className={styles.botSvg} title="" />
         </div>
         <div className={styles.bot} style={{ ["--d" as string]: "-1.1s" }}>
           <SproutIcon className={styles.sproutSvg} title="" />

@@ -7,7 +7,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Versor Robotics | Autonomous machines for the fields of tomorrow",
   description:
-    "Versor Robotics builds autonomous harvesting and spraying robots for farms: rugged, precise and quietly relentless.",
+    "Versor Robotics builds farm robots: a collaborative mobile robot that follows you and goes where you guide it, and an autonomous sprayer. Rugged, precise and quietly relentless.",
   openGraph: {
     title: "Versor Robotics",
     description: "Autonomous machines for the fields of tomorrow.",

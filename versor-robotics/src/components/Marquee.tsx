@@ -1,6 +1,6 @@
 import styles from "./Marquee.module.css";
 
-const WORDS = ["Plant", "Spray", "Scan", "Harvest", "Repeat"];
+const WORDS = ["Plant", "Spray", "Scan", "Carry", "Repeat"];
 
 const Sprout = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" className={styles.icon}>

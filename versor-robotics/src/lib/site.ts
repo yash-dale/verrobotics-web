@@ -71,17 +71,17 @@ export const site: SiteConfig = {
 /** (placeholder) products — names, codes and copy are yours to rename */
 export const products = [
   {
-    id: "harvest",
+    id: "carrier",
     index: "3.1",
     code: "VR-01",
-    kind: "Harvesting robot",
-    name: "Harvest-Hand",
+    kind: "Collaborative mobile robot",
+    name: "Field-Mate", // working name: rename it here, nowhere else
     tagline:
-      "A soft-grip picking arm that finds ripe fruit, lifts it free and keeps moving down the row.",
+      "A mobile robot that gets around on its own, follows you as you work, and goes wherever you guide it by hand.",
     points: [
-      "Soft-grip picker for delicate fruit",
-      "Vision-based ripeness grading",
-      "Follows the row on its own",
+      "Moves around on its own",
+      "Follows you through the field",
+      "A light touch guides it anywhere, no hard pushing",
     ],
   },
   {
@@ -104,7 +104,7 @@ export const features = [
   {
     id: "follow",
     title: "Autonomous Follow-Me",
-    text: "The robot locks onto its operator and walks the field with them, keeping a safe distance while it carries crates, tools or a full tank.",
+    text: "The robot locks onto its operator and walks the field with them, carrying crates, tools or a full tank. Want it somewhere else? A light touch of the hand guides it there.",
   },
   {
     id: "spray",

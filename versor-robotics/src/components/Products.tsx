@@ -1,13 +1,13 @@
 import { Check } from "lucide-react";
 import Chapter from "./Chapter";
 import Reveal from "./Reveal";
-import { HarvesterBot, SprayerBot } from "./illustrations/Bots";
+import { CarrierBot, SprayerBot } from "./illustrations/Bots";
 import styles from "./Products.module.css";
 import { C } from "@/lib/palette";
 import { products } from "@/lib/site";
 
 const art = {
-  harvest: { Bot: HarvesterBot, screen: C.sproutDark },
+  carrier: { Bot: CarrierBot, screen: C.sproutDark },
   spray: { Bot: SprayerBot, screen: "#3b6676" },
 } as const;
 
