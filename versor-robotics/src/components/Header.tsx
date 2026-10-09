@@ -1,14 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import styles from "./Header.module.css";
+import LanguagePicker from "./LanguagePicker";
 import { RoverBot } from "./illustrations/Bots";
+import { localePath, type Locale } from "@/i18n/routing";
 import { nav } from "@/lib/site";
 
 export default function Header() {
+  const t = useTranslations("header");
+  const tn = useTranslations("nav");
+  // links carry the home path so they also work from other pages (/simulator); SmoothAnchors glides them on the home page
+  const locale = useLocale() as Locale;
+  const home = localePath(locale);
+  const headerRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const [compact, setCompact] = useState<boolean | null>(null); // null until measured
+
+  // Use the burger menu whenever the full nav does not fit on one line. Measured rather than a fixed breakpoint,
+  // because the same nav is ~950px wide in English and ~1070px in Malayalam.
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    const bar = header?.firstElementChild as HTMLElement | null;
+    const logo = bar?.querySelector("a");
+    const navEl = bar?.querySelector("nav");
+    if (!header || !bar || !logo || !navEl) return;
+    const fit = () => {
+      header.setAttribute("data-measure", "");
+      const cs = getComputedStyle(bar);
+      const room = bar.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const need = logo.offsetWidth + navEl.offsetWidth + 24;
+      header.removeAttribute("data-measure");
+      setCompact(need > room);
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(bar);
+    document.fonts?.ready.then(fit); // Indic fonts change the label widths once they arrive
+    return () => ro.disconnect();
+  }, [locale]);
+
+  useEffect(() => {
+    if (compact === false) setOpen(false);
+  }, [compact]);
 
   // highlight the section whose wash has finished
   useEffect(() => {
@@ -17,7 +54,7 @@ export default function Header() {
       ticking = false;
       const vh = window.innerHeight;
       let current = "";
-      for (const { id } of nav) {
+      for (const id of nav) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= vh * 0.5) current = id;
       }
@@ -40,21 +77,27 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={styles.header}>
+    <header
+      ref={headerRef}
+      className={styles.header}
+      data-ready={compact === null ? undefined : ""}
+      data-compact={compact ? "" : undefined}
+    >
       <div className={`container ${styles.bar}`}>
-        <a href="#top" className={styles.logo} aria-label="Versor Robotics, back to top">
-          <RoverBot className={styles.logoBot} title="" />
-          <span>Versor</span>
+        <a href={`${home}#top`} className={styles.logo} aria-label={t("home")}>
+          <RoverBot className={styles.logoBot} />
+          <span lang="en">Versor</span>
         </a>
 
-        <nav className={styles.nav} aria-label="Primary">
-          {nav.map((n) => (
-            <a key={n.id} href={`#${n.id}`} className={active === n.id ? styles.active : undefined} aria-current={active === n.id ? "true" : undefined}>
-              {n.label}
+        <nav className={styles.nav} aria-label={t("primary")}>
+          {nav.map((id) => (
+            <a key={id} href={`${home}#${id}`} className={active === id ? styles.active : undefined} aria-current={active === id ? "true" : undefined}>
+              {tn(id)}
             </a>
           ))}
-          <a href="#contact" className={`btn btn--tomato ${styles.cta}`}>
-            Start a pilot
+          <LanguagePicker />
+          <a href={`${home}#contact`} className={`btn btn--tomato ${styles.cta}`}>
+            {t("cta")}
           </a>
         </nav>
 
@@ -63,21 +106,22 @@ export default function Header() {
           className={styles.burger}
           aria-expanded={open}
           aria-controls="mobile-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label={open ? t("closeMenu") : t("openMenu")}
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      <nav id="mobile-nav" className={`${styles.panel} ${open ? styles.panelOpen : ""}`} aria-label="Mobile">
-        {nav.map((n) => (
-          <a key={n.id} href={`#${n.id}`} onClick={() => setOpen(false)}>
-            {n.label}
+      <nav id="mobile-nav" className={`${styles.panel} ${open ? styles.panelOpen : ""}`} aria-label={t("mobile")}>
+        {nav.map((id) => (
+          <a key={id} href={`${home}#${id}`} onClick={() => setOpen(false)}>
+            {tn(id)}
           </a>
         ))}
-        <a href="#contact" className="btn btn--tomato" onClick={() => setOpen(false)}>
-          Start a pilot
+        <LanguagePicker className={styles.panelPicker} onPick={() => setOpen(false)} />
+        <a href={`${home}#contact`} className="btn btn--tomato" onClick={() => setOpen(false)}>
+          {t("cta")}
         </a>
       </nav>
     </header>

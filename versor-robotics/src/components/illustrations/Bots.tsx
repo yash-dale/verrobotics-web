@@ -4,13 +4,16 @@ type BotProps = { className?: string; title?: string };
 
 const stroke = { stroke: C.ink, strokeLinejoin: "round" as const, strokeLinecap: "round" as const };
 
+/** A translated title makes the drawing an image with that name; without one it is decoration and hidden from screen readers. */
+const a11y = (title?: string) => (title ? { role: "img", "aria-label": title } : { "aria-hidden": true });
+
 /**
  * Little rover: the mascot, header logo and footer. A cube on four wheels with a spray mast on its right side.
  * Faces right, so the mast (with its row of nozzles) is the side we see.
  */
-export function RoverBot({ className, title = "Versor rover" }: BotProps) {
+export function RoverBot({ className, title }: BotProps) {
   return (
-    <svg viewBox="0 0 120 76" className={className} role="img" aria-label={title}>
+    <svg viewBox="0 0 120 76" className={className} {...a11y(title)}>
       <ellipse cx="60" cy="72.5" rx="48" ry="3.5" fill="rgba(0,0,0,0.28)" />
 
       {/* far-side wheels peeking out behind the near ones */}
@@ -94,9 +97,9 @@ const berry = (cx: number, cy: number, r = 8) => (
  * Collaborative mobile robot, side view facing right: a low wheeled carrier with a crate on its deck
  * and a touch handle at the back that the operator holds to guide it.
  */
-export function CarrierBot({ className, title = "Collaborative mobile robot" }: BotProps) {
+export function CarrierBot({ className, title }: BotProps) {
   return (
-    <svg viewBox="0 0 220 150" className={className} role="img" aria-label={title}>
+    <svg viewBox="0 0 220 150" className={className} {...a11y(title)}>
       <ellipse cx="108" cy="146" rx="86" ry="4" fill="rgba(0,0,0,0.28)" />
 
       {/* far-side wheels peeking out behind the near ones */}
@@ -154,10 +157,10 @@ export function CarrierBot({ className, title = "Collaborative mobile robot" }: 
 }
 
 /** Spraying robot, front view: wide boom with a row of nozzles throwing spray. */
-export function SprayerBot({ className, title = "Spraying robot" }: BotProps) {
+export function SprayerBot({ className, title }: BotProps) {
   const nozzles = [22, 52, 82, 158, 188, 218];
   return (
-    <svg viewBox="0 0 240 150" className={className} role="img" aria-label={title}>
+    <svg viewBox="0 0 240 150" className={className} {...a11y(title)}>
       <ellipse cx="120" cy="146" rx="96" ry="4" fill="rgba(0,0,0,0.28)" />
 
       {/* spray fans */}
@@ -211,9 +214,9 @@ export function SprayerBot({ className, title = "Spraying robot" }: BotProps) {
 }
 
 /** A little sprout in the soil. */
-export function SproutIcon({ className, title = "Sprout" }: BotProps) {
+export function SproutIcon({ className, title }: BotProps) {
   return (
-    <svg viewBox="0 0 100 150" className={className} role="img" aria-label={title}>
+    <svg viewBox="0 0 100 150" className={className} {...a11y(title)}>
       <ellipse cx="50" cy="143" rx="34" ry="6" fill={C.soil} {...stroke} strokeWidth="3" />
       <g className="rv-sway">
         <path d="M50 140V66" stroke={C.ink} strokeWidth="11" strokeLinecap="round" />

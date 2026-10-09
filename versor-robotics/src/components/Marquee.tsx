@@ -1,6 +1,7 @@
+import { useTranslations } from "next-intl";
 import styles from "./Marquee.module.css";
 
-const WORDS = ["Plant", "Spray", "Scan", "Carry", "Repeat"];
+const WORDS = ["plant", "spray", "scan", "carry", "repeat"] as const;
 
 const Sprout = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" className={styles.icon}>
@@ -12,11 +13,12 @@ const Sprout = () => (
 
 /** Endless ticker strip. Content is duplicated so the loop is seamless. */
 export default function Marquee() {
+  const t = useTranslations("marquee");
   const row = (hidden: boolean) => (
     <div className={styles.row} aria-hidden={hidden || undefined}>
       {[...WORDS, ...WORDS, ...WORDS, ...WORDS].map((w, i) => (
         <span key={i} className={styles.item}>
-          {w}
+          {t(w)}
           <Sprout />
         </span>
       ))}

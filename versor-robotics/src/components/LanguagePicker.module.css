@@ -1,0 +1,64 @@
+.picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--cream);
+}
+
+.picker[data-pending] {
+  opacity: 0.6;
+}
+
+.icon,
+.chev {
+  position: absolute;
+  pointer-events: none;
+  color: var(--amber);
+}
+
+.icon {
+  left: 10px;
+}
+
+.chev {
+  right: 9px;
+}
+
+.picker select {
+  appearance: none;
+  min-height: 36px;
+  padding: 6px 28px 6px 32px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cream);
+  background: transparent;
+  border: 2px solid var(--cream-50);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.picker select:hover {
+  border-color: var(--cream);
+}
+
+.picker select:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* the open list is drawn by the OS; keep it readable on light and dark system themes */
+.picker option {
+  color: var(--ink);
+  background: var(--cream);
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

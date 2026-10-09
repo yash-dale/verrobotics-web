@@ -1,59 +1,58 @@
 import { ArrowUpRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Chapter from "./Chapter";
 import { SproutIcon } from "./illustrations/Bots";
 import styles from "./JoinUs.module.css";
+import { kicker, rich } from "@/i18n/rich";
 import { C } from "@/lib/palette";
 import { roles, site } from "@/lib/site";
 
 export default function JoinUs() {
+  const t = useTranslations("join");
+  const tn = useTranslations("nav");
   const { url, embedUrl } = site.forms.join;
   // Until a Google Form link is set, applications fall back to email.
-  const apply = url || `mailto:${site.email}?subject=${encodeURIComponent("Application: Versor Robotics")}`;
+  const apply = url || `mailto:${site.email}?subject=${encodeURIComponent(t("applySubject"))}`;
   const external = Boolean(url);
 
   return (
-    <Chapter id="join" prev={C.deep} bg={C.ink}>
+    <Chapter id="join" label={tn("join")} prev={C.deep} bg={C.ink}>
       <div className="container">
         <div className={styles.head}>
           <div>
-            <p className="kicker">06 / Join us</p>
-            <h2 className="title">
-              Grow with
-              <br />
-              the fleet<span className="dot">.</span>
-            </h2>
+            <p className="kicker">{kicker(6, tn("join"))}</p>
+            <h2 className="title">{t.rich("title", rich)}</h2>
             <p className="lede">
-              We are engineers, agronomists and ex-arcade kids building machines that smell like soil and hum like
-              synthesizers. Come build the fleet with us.
+              {t("lede")}
             </p>
             <div className={styles.ctas}>
               <a href={apply} className="btn btn--sprout" {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-                Apply now
+                {t("apply")}
               </a>
               <a href={`mailto:${site.email}`} className="btn btn--ghost">
-                Say hello
+                {t("hello")}
               </a>
             </div>
           </div>
 
           <div className={styles.badge} aria-hidden="true">
-            <SproutIcon className={styles.sprout} title="" />
+            <SproutIcon className={styles.sprout} />
           </div>
         </div>
 
         <div className={styles.roles}>
           <div className={styles.rolesHead}>
-            <span>Open roles</span>
-            <span>Team / Location</span>
+            <span>{t("openRoles")}</span>
+            <span>{t("teamLocation")}</span>
           </div>
           <ul>
-            {roles.map((r) => (
-              <li key={r.title}>
+            {roles.map((id) => (
+              <li key={id}>
                 <a href={apply} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-                  <strong>{r.title}</strong>
+                  <strong>{t(`roles.${id}.title`)}</strong>
                   <span className={styles.tags}>
-                    <em>{r.team}</em>
-                    <em className={styles.where}>{r.where}</em>
+                    <em>{t(`roles.${id}.team`)}</em>
+                    <em className={styles.where}>{t(`roles.${id}.where`)}</em>
                     <ArrowUpRight size={18} aria-hidden="true" />
                   </span>
                 </a>
@@ -64,7 +63,7 @@ export default function JoinUs() {
 
         {embedUrl ? (
           <div className={styles.embed}>
-            <iframe src={embedUrl} title="Versor Robotics application form" loading="lazy" />
+            <iframe src={embedUrl} title={t("formTitle")} loading="lazy" />
           </div>
         ) : null}
       </div>

@@ -1,34 +1,5 @@
-import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/montserrat";
-import "@fontsource/space-mono/400.css";
-import "@fontsource/space-mono/700.css";
-import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "Versor Robotics | Autonomous machines for the fields of tomorrow",
-  description:
-    "Versor Robotics builds farm robots: a collaborative mobile robot that follows you and goes where you guide it, and an autonomous sprayer. Rugged, precise and quietly relentless.",
-  openGraph: {
-    title: "Versor Robotics",
-    description: "Autonomous machines for the fields of tomorrow.",
-    type: "website",
-  },
-};
-
-export const viewport: Viewport = {
-  themeColor: "#131f1d",
-  width: "device-width",
-  initialScale: 1,
-};
-
+// The real root layout (<html lang>, fonts, messages) is app/[locale]/layout.tsx.
+// This one only exists so app/not-found.tsx has a parent; it just passes children through.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* arms the scroll-reveal styles only when JavaScript is running */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
-      </head>
-      <body>{children}</body>
-    </html>
-  );
+  return children;
 }

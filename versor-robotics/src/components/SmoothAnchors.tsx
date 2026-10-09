@@ -86,9 +86,12 @@ export default function SmoothAnchors() {
 
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      const a = (e.target as Element | null)?.closest?.("a[href^='#']") as HTMLAnchorElement | null;
+      // "#vision" or a full link back to this page ("/hi#vision"); links to another page navigate normally
+      const a = (e.target as Element | null)?.closest?.("a[href*='#']") as HTMLAnchorElement | null;
       if (!a || (a.target && a.target !== "_self")) return;
-      const hash = a.getAttribute("href") ?? "";
+      const url = new URL(a.href);
+      if (url.origin !== location.origin || url.pathname !== location.pathname || url.search !== location.search) return;
+      const hash = url.hash;
       if (hash.length < 2) return;
       const el = document.getElementById(decodeURIComponent(hash.slice(1)));
       if (!el) return;

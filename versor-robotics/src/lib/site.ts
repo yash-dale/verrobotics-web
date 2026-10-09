@@ -1,12 +1,13 @@
 /**
  * ──────────────────────────────────────────────────────────────
- *  EDIT ME — everything you are likely to change lives in here.
+ *  EDIT ME — contact details, video, forms, product names and codes.
+ *  The words visitors read (in every language) are in messages/<locale>.json.
  *  Placeholder copy is marked (placeholder).
  * ──────────────────────────────────────────────────────────────
  */
 interface SiteConfig {
   name: string;
-  tagline: string;
+  url: string;
   email: string;
   phone: string;
   address: string;
@@ -22,7 +23,12 @@ interface SiteConfig {
 
 export const site: SiteConfig = {
   name: "Versor Robotics",
-  tagline: "Autonomous machines for the fields of tomorrow.",
+
+  // Public address of the site, used for canonical + hreflang links. Set NEXT_PUBLIC_SITE_URL
+  // (e.g. "https://versorrobotics.farm"); on Vercel the production domain is picked up automatically.
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
 
   // (placeholder) contact details
   email: "hello@versorrobotics.farm",
@@ -68,76 +74,30 @@ export const site: SiteConfig = {
   },
 };
 
-/** (placeholder) products — names, codes and copy are yours to rename */
+/**
+ * Products. Names and codes stay in Latin script in every language, so they live here.
+ * Everything a visitor reads about them (kind, tagline, bullet points) is in messages/<locale>.json under products.items.<id>.
+ */
 export const products = [
   {
     id: "carrier",
     index: "3.1",
     code: "VR-01",
-    kind: "Collaborative mobile robot",
     name: "Field-Mate", // working name: rename it here, nowhere else
-    tagline:
-      "A mobile robot that gets around on its own, follows you as you work, and goes wherever you guide it by hand.",
-    points: [
-      "Moves around on its own",
-      "Follows you through the field",
-      "A light touch guides it anywhere, no hard pushing",
-    ],
   },
   {
     id: "spray",
     index: "3.2",
     code: "VR-02",
-    kind: "Spraying robot",
     name: "Spray-Runner",
-    tagline:
-      "A wide boom of precision nozzles that sprays exactly where you tell it, row after row.",
-    points: [
-      "Multi-nozzle boom, built for tight rows",
-      "Waypoint and row-following autonomy",
-      "Voice-command ready",
-    ],
   },
 ] as const;
 
-export const features = [
-  {
-    id: "follow",
-    title: "Autonomous Follow-Me",
-    text: "The robot locks onto its operator and walks the field with them, carrying crates, tools or a full tank. Want it somewhere else? A light touch of the hand guides it there.",
-  },
-  {
-    id: "spray",
-    title: "Autonomous Spraying",
-    text: "Set the rows, press go. The boom drives the lines and sprays along the path with nobody at the controls.",
-  },
-  {
-    id: "asr",
-    title: "ASR Module",
-    text: "Talk to your robot. Onboard speech recognition turns plain spoken commands into actions, even with gloves on and the engine running.",
-  },
-  {
-    id: "waypoint",
-    title: "Waypoint Navigation",
-    text: "Drop pins on the map and the robot drives the route in order: stop by stop, row by row, and back home.",
-  },
-] as const;
+/** Feature cards, in order. Copy: messages/<locale>.json → features.items.<id> */
+export const features = ["follow", "spray", "asr", "waypoint"] as const;
 
-/** (placeholder) open roles */
-export const roles = [
-  { title: "Robotics Engineer (Manipulation)", team: "Hardware", where: "Onsite" },
-  { title: "Perception Engineer (Crop Vision)", team: "AI", where: "Hybrid" },
-  { title: "Field Operations Lead", team: "Deployments", where: "Onsite" },
-  { title: "Farm Partnerships Manager", team: "Growth", where: "Remote" },
-] as const;
+/** (placeholder) open roles, in order. Copy: messages/<locale>.json → join.roles.<id> */
+export const roles = ["manipulation", "perception", "fieldOps", "partnerships"] as const;
 
-/** Nav + section order. `id` matches the anchor id of each chapter. */
-export const nav = [
-  { id: "vision", label: "Vision" },
-  { id: "video", label: "Video" },
-  { id: "products", label: "Products" },
-  { id: "features", label: "Features" },
-  { id: "contact", label: "Contact" },
-  { id: "join", label: "Join us" },
-  { id: "play", label: "Play" },
-] as const;
+/** Nav + section order. Each id matches a chapter's anchor id; labels are in messages/<locale>.json → nav.<id> */
+export const nav = ["vision", "video", "products", "features", "contact", "join", "play"] as const;

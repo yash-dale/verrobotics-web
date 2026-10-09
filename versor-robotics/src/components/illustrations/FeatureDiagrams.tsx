@@ -1,6 +1,7 @@
 import { C } from "@/lib/palette";
 
-const mono = { fontFamily: '"Space Mono", ui-monospace, monospace' } as const;
+// follows the page language: Space Mono for Latin, the script's Noto Sans for Indic text (see globals.css)
+const mono = { style: { fontFamily: "var(--font-label)" } } as const;
 const ink = { stroke: C.ink, strokeLinejoin: "round" as const, strokeLinecap: "round" as const };
 
 const Frame = ({ children, label }: { children: React.ReactNode; label: string }) => (
@@ -9,6 +10,9 @@ const Frame = ({ children, label }: { children: React.ReactNode; label: string }
     {children}
   </svg>
 );
+
+/** Every diagram gets its accessible label, plus any words drawn inside it, already translated. */
+type DiagramProps = { label: string; text: { status?: string; command?: string; reply?: string } };
 
 /** Top-down rover used by several diagrams. Faces +x. */
 const MiniRover = () => (
@@ -24,10 +28,10 @@ const MiniRover = () => (
 );
 
 /* 1 ─ Follow me: operator walks a loop, rover trails a few steps behind */
-export function FollowMeDiagram() {
+export function FollowMeDiagram({ label, text }: DiagramProps) {
   const loop = "M70 90C70 40 120 34 160 34C210 34 250 40 250 90C250 140 210 146 160 146C120 146 70 140 70 90Z";
   return (
-    <Frame label="Top-down map: a rover follows its operator around a field">
+    <Frame label={label}>
       <defs>
         <path id="fm-loop" d={loop} />
       </defs>
@@ -58,18 +62,18 @@ export function FollowMeDiagram() {
         <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite" />
       </circle>
       <text x="38" y="164" fontSize="11" fontWeight="700" letterSpacing="1.5" fill={C.cream} {...mono}>
-        FOLLOWING
+        {text.status}
       </text>
     </Frame>
   );
 }
 
 /* 2 ─ Autonomous spraying: boom sweeps a crop field and leaves it wet */
-export function SprayDiagram() {
+export function SprayDiagram({ label }: DiagramProps) {
   const rowsY = [36, 72, 108, 144];
   const cols = Array.from({ length: 15 }, (_, i) => 20 + i * 20);
   return (
-    <Frame label="Top-down map: a spraying rover drives across crop rows and wets them">
+    <Frame label={label}>
       {rowsY.map((y) =>
         cols.map((x) => <circle key={`${x}-${y}`} cx={x} cy={y} r="4" fill={C.sprout} opacity="0.9" />),
       )}
@@ -103,17 +107,17 @@ export function SprayDiagram() {
 }
 
 /* 3 ─ ASR: a spoken command, a spoken reply, live waveform */
-export function AsrDiagram() {
+export function AsrDiagram({ label, text }: DiagramProps) {
   const bars = Array.from({ length: 19 }, (_, i) => i);
   return (
-    <Frame label="A spoken command, 'Spray rows three to six', and the robot's spoken reply">
+    <Frame label={label}>
       <g>
         <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.06;0.85;0.92;1" dur="8s" repeatCount="indefinite" />
         <rect x="20" y="14" width="214" height="34" rx="12" fill={C.cream} {...ink} strokeWidth="2.5" />
         <path d="M40 48l-5 11l17-11z" fill={C.cream} {...ink} strokeWidth="2.5" />
         <rect x="36" y="46" width="14" height="4" fill={C.cream} />
         <text x="34" y="36" fontSize="12" fontWeight="700" fill={C.ink} {...mono}>
-          “Spray rows three to six.”
+          {text.command}
         </text>
       </g>
       <g>
@@ -122,7 +126,7 @@ export function AsrDiagram() {
         <path d="M278 96l5 11l-17-11z" fill={C.amber} {...ink} strokeWidth="2.5" />
         <rect x="266" y="94" width="14" height="4" fill={C.amber} />
         <text x="100" y="84" fontSize="12" fontWeight="700" fill={C.ink} {...mono}>
-          Copy. Starting now.
+          {text.reply}
         </text>
       </g>
       {bars.map((i) => {
@@ -150,7 +154,7 @@ export function AsrDiagram() {
 }
 
 /* 4 ─ Waypoints: pins on a map, rover drives them in order */
-export function WaypointDiagram() {
+export function WaypointDiagram({ label }: DiagramProps) {
   const pts: [number, number][] = [
     [40, 140],
     [100, 60],
@@ -160,7 +164,7 @@ export function WaypointDiagram() {
   const path = `M${pts.map((p) => p.join(" ")).join("L")}`;
   const pulses = [0.32, 0.65, 0.88];
   return (
-    <Frame label="A map with four numbered waypoints; the rover drives them in order">
+    <Frame label={label}>
       <path d="M0 45H320M0 90H320M0 135H320M80 0V180M160 0V180M240 0V180" stroke={C.cream} strokeOpacity="0.09" strokeWidth="1.5" />
       <path d={path} fill="none" stroke={C.cream} strokeOpacity="0.45" strokeWidth="2.5" strokeDasharray="4 7" strokeLinecap="round" strokeLinejoin="round" />
 

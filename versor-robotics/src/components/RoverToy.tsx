@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import styles from "./RoverToy.module.css";
 import { RoverBot } from "./illustrations/Bots";
 import { HALF_TRACK, ORIGIN_X, ORIGIN_Y, PX_PER_UNIT, SIN_E, VIEW_H, VIEW_W, WHEEL_R } from "./rover3d.config";
@@ -31,6 +32,7 @@ const hits = (x: number, y: number, rs: Rect[], pad: number) =>
  *  - It never drives over (or sits on) anything marked data-rover-avoid: the video screen and the game.
  */
 export default function RoverToy() {
+  const t = useTranslations("rover");
   const root = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const grabRef = useRef<HTMLDivElement>(null);
@@ -435,9 +437,9 @@ export default function RoverToy() {
     <div ref={root} className={styles.rover} aria-hidden="true">
       <canvas ref={canvasRef} className={styles.canvas} style={{ width: VIEW_W, height: VIEW_H, display: fallback ? "none" : "block" }} />
       <div ref={grabRef} className={styles.grab} style={{ left: ORIGIN_X - 44, top: ORIGIN_Y - 84 }}>
-        {hint ? <span className={styles.hint}>Grab me!</span> : null}
+        {hint ? <span className={styles.hint}>{t("hint")}</span> : null}
         <div ref={fbRef} className={styles.fb} style={{ display: fallback ? "block" : "none" }}>
-          <RoverBot className={styles.fbSvg} title="" />
+          <RoverBot className={styles.fbSvg} />
         </div>
       </div>
     </div>

@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "title": "Versor Robotics | Autonomous machines for the fields of tomorrow",
+    "description": "Versor Robotics builds farm robots: a collaborative mobile robot that follows you and goes where you guide it, and an autonomous sprayer. Rugged, precise and quietly relentless.",
+    "ogDescription": "Autonomous machines for the fields of tomorrow."
+  },
+  "nav": {
+    "vision": "Vision",
+    "video": "Video",
+    "products": "Products",
+    "features": "Features",
+    "contact": "Contact",
+    "join": "Join us",
+    "play": "Play"
+  },
+  "header": {
+    "home": "Versor Robotics, back to top",
+    "primary": "Primary",
+    "mobile": "Mobile",
+    "cta": "Start a pilot",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language"
+  },
+  "hero": {
+    "badge": "Field systems online",
+    "lede": "Autonomous machines for the fields of tomorrow. We build farm robots with the soul of an arcade cabinet: rugged, precise, and quietly relentless.",
+    "ctaMachines": "See the machines",
+    "ctaVision": "Read the vision"
+  },
+  "marquee": {
+    "plant": "Plant",
+    "spray": "Spray",
+    "scan": "Scan",
+    "carry": "Carry",
+    "repeat": "Repeat"
+  },
+  "vision": {
+    "title": "Agriculture,<br></br>played on<br></br><ink>easy mode.</ink>",
+    "lede": "Versor Robotics exists to make small farms mighty. We believe the next green revolution is not bigger tractors. It is fleets of tireless, respectful machines that treat every plant as an individual and every field as a living system.",
+    "unitAlt": "Versor rover, unit 07",
+    "unitCaption": "Unit-07",
+    "values": {
+      "soil": {
+        "title": "Soil first",
+        "text": "Every machine we ship is judged by one metric: healthier soil at season end. No compaction, no blanket chemistry, no waste."
+      },
+      "edge": {
+        "title": "Edge intelligence",
+        "text": "Our robots see, decide and act in the field. No cloud round-trips, no dead zones, so a row of crops is handled where it grows."
+      },
+      "open": {
+        "title": "Radical transparency",
+        "text": "Open field logs, open repair manuals. A farmer should always know what the robot did last night and why."
+      }
+    }
+  },
+  "video": {
+    "title": "See it in the field<dot>.</dot>",
+    "frameTitle": "Versor Robotics demo video",
+    "soonTitle": "Demo reel coming soon",
+    "soonText": "The cameras are in the field. Check back shortly.",
+    "cam": "Field cam 01"
+  },
+  "products": {
+    "title": "Pick your player<dot>.</dot>",
+    "lede": "Two machines, one fleet. Slot them into your season like cartridges into a cabinet.",
+    "cta": "Request a demo",
+    "items": {
+      "carrier": {
+        "kind": "Collaborative mobile robot",
+        "tagline": "A mobile robot that gets around on its own, follows you as you work, and goes wherever you guide it by hand.",
+        "points": {
+          "1": "Moves around on its own",
+          "2": "Follows you through the field",
+          "3": "A light touch guides it anywhere, no hard pushing"
+        }
+      },
+      "spray": {
+        "kind": "Spraying robot",
+        "tagline": "A wide boom of precision nozzles that sprays exactly where you tell it, row after row.",
+        "points": {
+          "1": "Multi-nozzle boom, built for tight rows",
+          "2": "Waypoint and row-following autonomy",
+          "3": "Voice-command ready"
+        }
+      }
+    }
+  },
+  "features": {
+    "title": "Power-ups, built in<dot>.</dot>",
+    "lede": "Four capabilities that make a Versor robot feel less like a machine and more like a crew member.",
+    "items": {
+      "follow": {
+        "title": "Autonomous Follow-Me",
+        "text": "The robot locks onto its operator and walks the field with them, carrying crates, tools or a full tank. Want it somewhere else? A light touch of the hand guides it there.",
+        "diagram": "Top-down map: a rover follows its operator around a field",
+        "status": "Following"
+      },
+      "spray": {
+        "title": "Autonomous Spraying",
+        "text": "Set the rows, press go. The boom drives the lines and sprays along the path with nobody at the controls.",
+        "diagram": "Top-down map: a spraying rover drives across crop rows and wets them"
+      },
+      "asr": {
+        "title": "ASR Module",
+        "text": "Talk to your robot. Onboard speech recognition turns plain spoken commands into actions, even with gloves on and the engine running.",
+        "diagram": "A spoken command, 'Spray rows three to six', and the robot's spoken reply",
+        "command": "“Spray rows three to six.”",
+        "reply": "Copy. Starting now."
+      },
+      "waypoint": {
+        "title": "Waypoint Navigation",
+        "text": "Drop pins on the map and the robot drives the route in order: stop by stop, row by row, and back home.",
+        "diagram": "A map with four numbered waypoints; the rover drives them in order"
+      }
+    }
+  },
+  "contact": {
+    "title": "Insert coin<dot>.</dot> Talk to us<dot>.</dot>",
+    "lede": "Running a farm, a research plot, or a co-op? Tell us about your fields and we will tell you what a Versor fleet could do on them.",
+    "noteTitle": "Pilot program",
+    "noteText": "Tell us about your crops, your acreage and your biggest bottleneck. A real person will reply.",
+    "name": "Name",
+    "namePlaceholder": "Farm name / your name",
+    "email": "Email",
+    "emailPlaceholder": "you@farm.example",
+    "interest": "I’m interested in",
+    "interestBoth": "Both robots",
+    "interestOther": "Something else",
+    "message": "Your fields & what you need",
+    "messagePlaceholder": "40 acres of strawberries, spraying by hand…",
+    "send": "Send message",
+    "sending": "Sending…",
+    "sent": "Message sent. We will be in touch soon.",
+    "mailto": "Your email app should open with the message ready to send.",
+    "error": "That did not go through. Please check your connection or email us directly.",
+    "mail": {
+      "subject": "Pilot enquiry from {name}",
+      "fallbackName": "the website",
+      "name": "Name",
+      "email": "Email",
+      "interest": "Interested in",
+      "language": "Language"
+    }
+  },
+  "join": {
+    "title": "Grow with<br></br>the fleet<dot>.</dot>",
+    "lede": "We are engineers, agronomists and ex-arcade kids building machines that smell like soil and hum like synthesizers. Come build the fleet with us.",
+    "apply": "Apply now",
+    "hello": "Say hello",
+    "applySubject": "Application: Versor Robotics",
+    "openRoles": "Open roles",
+    "teamLocation": "Team / Location",
+    "formTitle": "Versor Robotics application form",
+    "roles": {
+      "manipulation": { "title": "Robotics Engineer (Manipulation)", "team": "Hardware", "where": "Onsite" },
+      "perception": { "title": "Perception Engineer (Crop Vision)", "team": "AI", "where": "Hybrid" },
+      "fieldOps": { "title": "Field Operations Lead", "team": "Deployments", "where": "Onsite" },
+      "partnerships": { "title": "Farm Partnerships Manager", "team": "Growth", "where": "Remote" }
+    }
+  },
+  "game": {
+    "title": "Field run<dot>.</dot>",
+    "player": "Player 1",
+    "cabinet": "Versor field run",
+    "insert": "Insert seed",
+    "canvas": "Field Run: a side-on game where the Versor rover changes lanes to dodge weeds and rocks and collect seeds.",
+    "score": "Score",
+    "seeds": "Seeds",
+    "best": "Best",
+    "speed": "Speed",
+    "readyKicker": "Arcade mode",
+    "readyTitle": "Field run",
+    "readyText": "Change lanes to dodge weeds, rocks, stumps and hay bales. Scoop up seeds. Don’t crash.",
+    "crashedKicker": "Rover down",
+    "crashedTitle": "Crashed!",
+    "result": "Score <b>{score}</b> · Best <b>{best}</b>",
+    "newBest": "New best!",
+    "pausedKicker": "Hold on",
+    "pausedTitle": "Paused",
+    "tapStart": "Tap to start",
+    "keyStart": "Press Enter to start",
+    "tapResume": "Tap to resume",
+    "keyResume": "Press Enter to resume",
+    "tapAgain": "Tap to go again",
+    "keyAgain": "Press Enter to go again",
+    "controls": "Controls",
+    "keyUp": "lane up",
+    "keyDown": "lane down",
+    "keyBoost": "boost",
+    "keyBrake": "brake",
+    "keyRestart": "start / restart",
+    "touchUp": "Up",
+    "touchDown": "Down",
+    "touchBrake": "Slow",
+    "touchBoost": "Fast",
+    "rotate": "Tip: turn your phone sideways for a bigger field."
+  },
+  "footer": {
+    "top": "Back to top",
+    "nav": "Footer",
+    "tagline": "Grown, not mined."
+  },
+  "rover": {
+    "hint": "Grab me!"
+  },
+  "notFound": {
+    "title": "Off the map<dot>.</dot>",
+    "text": "This page is not in the field. Head back and pick another row.",
+    "home": "Back to home"
+  }
+}

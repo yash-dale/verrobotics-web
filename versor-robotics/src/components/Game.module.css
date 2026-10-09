@@ -266,6 +266,7 @@
   height: 26px;
   padding: 0 6px;
   font: inherit;
+  font-family: var(--font-label);
   color: var(--ink);
   background: var(--cream);
   border-radius: 6px;
@@ -301,8 +302,17 @@
   .touch button {
     display: grid;
     place-items: center;
-    width: 56px;
-    height: 48px;
+    align-content: center;
+    gap: 1px;
+    min-width: 58px;
+    height: 54px;
+    padding: 0 6px;
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--ink);
     background: var(--cream);
     border: 3px solid var(--ink);

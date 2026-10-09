@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import styles from "./VideoPlayer.module.css";
 import { site } from "@/lib/site";
 
@@ -11,6 +12,7 @@ import { site } from "@/lib/site";
  *  - if the file is missing, shows a "reel coming soon" screen instead of a broken player
  */
 export default function VideoPlayer() {
+  const t = useTranslations("video");
   const { src, poster, youtubeId } = site.video;
   const [failed, setFailed] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -35,7 +37,7 @@ export default function VideoPlayer() {
           <iframe
             className={styles.media}
             src={`https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0&modestbranding=1`}
-            title="Versor Robotics demo video"
+            title={t("frameTitle")}
             loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
@@ -53,8 +55,8 @@ export default function VideoPlayer() {
           />
         ) : (
           <div className={styles.nosignal}>
-            <p className={styles.nsTitle}>Demo reel coming soon</p>
-            <p className={styles.nsSub}>The cameras are in the field. Check back shortly.</p>
+            <p className={styles.nsTitle}>{t("soonTitle")}</p>
+            <p className={styles.nsSub}>{t("soonText")}</p>
             <div className={styles.bars} aria-hidden="true">
               <i />
               <i />
@@ -71,7 +73,7 @@ export default function VideoPlayer() {
 
       <div className={styles.base} aria-hidden="true">
         <span className={styles.rec}>
-          <i /> Field cam 01
+          <i /> {t("cam")}
         </span>
         <span className={styles.knobs}>
           <i />

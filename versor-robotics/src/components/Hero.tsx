@@ -1,6 +1,8 @@
+import { useTranslations } from "next-intl";
 import styles from "./Hero.module.css";
 import { CarrierBot, SprayerBot, SproutIcon } from "./illustrations/Bots";
 import Marquee from "./Marquee";
+import { site } from "@/lib/site";
 
 const VERSOR = "VERSOR".split("");
 const ROBOTICS = "ROBOTICS".split("");
@@ -18,6 +20,7 @@ const Letters = ({ text, offset = 0 }: { text: string[]; offset?: number }) => (
 );
 
 export default function Hero() {
+  const t = useTranslations("hero");
   return (
     <section id="top" className={styles.hero}>
       <div className={styles.sky} aria-hidden="true" />
@@ -27,10 +30,10 @@ export default function Hero() {
 
       <div className={`container ${styles.content}`}>
         <p className={styles.badge}>
-          <i /> Field systems online
+          <i /> {t("badge")}
         </p>
 
-        <h1 className={styles.title} aria-label="Versor Robotics">
+        <h1 className={styles.title} aria-label={site.name} lang="en">
           <span className={styles.versor} aria-hidden="true">
             <Letters text={VERSOR} />
           </span>
@@ -40,29 +43,28 @@ export default function Hero() {
         </h1>
 
         <p className={styles.lede}>
-          Autonomous machines for the fields of tomorrow. We build farm robots with the soul of an arcade cabinet:
-          rugged, precise, and quietly relentless.
+          {t("lede")}
         </p>
 
         <div className={styles.ctas}>
           <a href="#products" className="btn btn--amber">
-            See the machines
+            {t("ctaMachines")}
           </a>
           <a href="#vision" className="btn btn--ghost">
-            Read the vision
+            {t("ctaVision")}
           </a>
         </div>
       </div>
 
       <div className={styles.fleet} aria-hidden="true">
         <div className={`${styles.bot} rv-hover`} style={{ ["--d" as string]: "0s" }}>
-          <CarrierBot className={styles.botSvg} title="" />
+          <CarrierBot className={styles.botSvg} />
         </div>
         <div className={styles.bot} style={{ ["--d" as string]: "-1.1s" }}>
-          <SproutIcon className={styles.sproutSvg} title="" />
+          <SproutIcon className={styles.sproutSvg} />
         </div>
         <div className={`${styles.bot} rv-hover`} style={{ ["--d" as string]: "-2.2s" }}>
-          <SprayerBot className={styles.botSvg} title="" />
+          <SprayerBot className={styles.botSvg} />
         </div>
       </div>
 

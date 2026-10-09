@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Sprout } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Chapter from "./Chapter";
 import styles from "./Game.module.css";
+import { kicker, rich } from "@/i18n/rich";
 import { FieldRun, GAME_H, GAME_W, type Hud, type Phase } from "@/lib/fieldRun";
 import { C } from "@/lib/palette";
 
@@ -14,6 +16,8 @@ const pad = (n: number) => String(Math.max(0, Math.floor(n))).padStart(5, "0");
  * Keys only steer the game while it is on screen and being played, so typing in the contact form is never hijacked.
  */
 export default function Game() {
+  const t = useTranslations("game");
+  const tn = useTranslations("nav");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<FieldRun | null>(null);
   const scoreRef = useRef<HTMLSpanElement>(null);
@@ -181,20 +185,20 @@ export default function Game() {
   const lane = (d: -1 | 1) => () => gameRef.current?.changeLane(d);
 
   return (
-    <Chapter id="play" prev={C.ink} bg={C.steel} dot="rgba(0,0,0,0.08)">
+    <Chapter id="play" label={tn("play")} prev={C.ink} bg={C.steel} dot="rgba(0,0,0,0.08)">
       <div className="container">
         <div className={styles.head}>
-          <p className="kicker">07 / Play</p>
+          <p className="kicker">{kicker(7, tn("play"))}</p>
           <h2 className="title" style={{ fontSize: "clamp(2.1rem, 5vw, 3.9rem)" }}>
-            Field run<span className="dot">.</span>
+            {t.rich("title", rich)}
           </h2>
         </div>
 
         <div className={styles.cabinet} data-rover-avoid="">
           <div className={styles.marquee} aria-hidden="true">
-            <span>Player 1</span>
-            <strong>Versor field run</strong>
-            <span>Insert seed</span>
+            <span>{t("player")}</span>
+            <strong>{t("cabinet")}</strong>
+            <span>{t("insert")}</span>
           </div>
 
           <div className={styles.screen}>
@@ -204,33 +208,33 @@ export default function Game() {
               width={GAME_W}
               height={GAME_H}
               role="img"
-              aria-label="Field Run: a side-on game where the Versor rover changes lanes to dodge weeds and rocks and collect seeds."
+              aria-label={t("canvas")}
             />
 
             <div className={styles.hud} aria-live="off">
               <div className={styles.stat}>
-                <span className={styles.label}>Score</span>
-                <span ref={scoreRef} className={styles.value}>
+                <span className={styles.label}>{t("score")}</span>
+                <span ref={scoreRef} className={styles.value} lang="en">
                   00000
                 </span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.label}>
-                  <Sprout size={13} aria-hidden="true" /> Seeds
+                  <Sprout size={13} aria-hidden="true" /> {t("seeds")}
                 </span>
-                <span ref={seedsRef} className={styles.value}>
+                <span ref={seedsRef} className={styles.value} lang="en">
                   0
                 </span>
               </div>
               <div className={`${styles.stat} ${styles.right}`}>
-                <span className={styles.label}>Best</span>
-                <span ref={bestRef} className={styles.value}>
+                <span className={styles.label}>{t("best")}</span>
+                <span ref={bestRef} className={styles.value} lang="en">
                   00000
                 </span>
               </div>
             </div>
             <div className={styles.speed} aria-hidden="true">
-              <span className={styles.label}>Speed</span>
+              <span className={styles.label}>{t("speed")}</span>
               <i>
                 <span ref={speedRef} />
               </i>
@@ -238,42 +242,36 @@ export default function Game() {
 
             {phase !== "playing" ? (
               <div className={`${styles.overlay} ${phase === "crashed" ? styles.dock : ""}`}>
-                <div className={styles.card} role="dialog" aria-label={phase === "crashed" ? "Crashed" : phase === "paused" ? "Paused" : "Field Run"}>
+                <div className={styles.card} role="dialog" aria-label={phase === "crashed" ? t("crashedTitle") : phase === "paused" ? t("pausedTitle") : t("readyTitle")}>
                   {phase === "ready" ? (
                     <>
-                      <p className={styles.cardKicker}>Arcade mode</p>
-                      <h3>Field run</h3>
-                      <p>Change lanes to dodge weeds, rocks, stumps and hay bales. Scoop up seeds. Don&rsquo;t crash.</p>
+                      <p className={styles.cardKicker}>{t("readyKicker")}</p>
+                      <h3>{t("readyTitle")}</h3>
+                      <p>{t("readyText")}</p>
                     </>
                   ) : null}
                   {phase === "crashed" ? (
                     <>
-                      <p className={`${styles.cardKicker} ${styles.bad}`}>Rover down</p>
-                      <h3>Crashed!</h3>
+                      <p className={`${styles.cardKicker} ${styles.bad}`}>{t("crashedKicker")}</p>
+                      <h3>{t("crashedTitle")}</h3>
                       <p className={styles.result}>
-                        Score <b>{pad(result.score)}</b> &middot; Best <b>{pad(result.best)}</b>
+                        {t.rich("result", { score: pad(result.score), best: pad(result.best), b: (c) => <b lang="en">{c}</b> })}
                       </p>
-                      {result.fresh ? <p className={styles.fresh}>New best!</p> : null}
+                      {result.fresh ? <p className={styles.fresh}>{t("newBest")}</p> : null}
                     </>
                   ) : null}
                   {phase === "paused" ? (
                     <>
-                      <p className={styles.cardKicker}>Hold on</p>
-                      <h3>Paused</h3>
+                      <p className={styles.cardKicker}>{t("pausedKicker")}</p>
+                      <h3>{t("pausedTitle")}</h3>
                     </>
                   ) : null}
                   <button type="button" className="btn btn--amber" onClick={go}>
                     {phase === "ready"
-                      ? coarse
-                        ? "Tap to start"
-                        : "Press Enter to start"
+                      ? t(coarse ? "tapStart" : "keyStart")
                       : phase === "paused"
-                        ? coarse
-                          ? "Tap to resume"
-                          : "Press Enter to resume"
-                        : coarse
-                          ? "Tap to go again"
-                          : "Press Enter to go again"}
+                        ? t(coarse ? "tapResume" : "keyResume")
+                        : t(coarse ? "tapAgain" : "keyAgain")}
                   </button>
                 </div>
               </div>
@@ -284,45 +282,49 @@ export default function Game() {
           <div className={styles.touch} aria-hidden="true">
             <div>
               <button type="button" onPointerDown={lane(-1)} tabIndex={-1}>
-                <ArrowUp size={22} />
+                <ArrowUp size={20} />
+                <span>{t("touchUp")}</span>
               </button>
               <button type="button" onPointerDown={lane(1)} tabIndex={-1}>
-                <ArrowDown size={22} />
+                <ArrowDown size={20} />
+                <span>{t("touchDown")}</span>
               </button>
             </div>
             <div>
               <button type="button" onPointerDown={hold(-1)} onPointerUp={hold(0)} onPointerLeave={hold(0)} onPointerCancel={hold(0)} tabIndex={-1}>
-                <ArrowLeft size={22} />
+                <ArrowLeft size={20} />
+                <span>{t("touchBrake")}</span>
               </button>
               <button type="button" onPointerDown={hold(1)} onPointerUp={hold(0)} onPointerLeave={hold(0)} onPointerCancel={hold(0)} tabIndex={-1}>
-                <ArrowRight size={22} />
+                <ArrowRight size={20} />
+                <span>{t("touchBoost")}</span>
               </button>
             </div>
           </div>
 
-          <ul className={styles.keys} aria-label="Controls">
+          <ul className={styles.keys} aria-label={t("controls")}>
             <li>
-              <kbd>W</kbd>
-              <kbd>&uarr;</kbd> lane up
+              <kbd lang="en">W</kbd>
+              <kbd lang="en">&uarr;</kbd> {t("keyUp")}
             </li>
             <li>
-              <kbd>S</kbd>
-              <kbd>&darr;</kbd> lane down
+              <kbd lang="en">S</kbd>
+              <kbd lang="en">&darr;</kbd> {t("keyDown")}
             </li>
             <li>
-              <kbd>D</kbd>
-              <kbd>&rarr;</kbd> boost
+              <kbd lang="en">D</kbd>
+              <kbd lang="en">&rarr;</kbd> {t("keyBoost")}
             </li>
             <li>
-              <kbd>A</kbd>
-              <kbd>&larr;</kbd> brake
+              <kbd lang="en">A</kbd>
+              <kbd lang="en">&larr;</kbd> {t("keyBrake")}
             </li>
             <li>
-              <kbd className={styles.wide}>Enter</kbd> start / restart
+              <kbd className={styles.wide} lang="en">Enter</kbd> {t("keyRestart")}
             </li>
           </ul>
         </div>
-        <p className={styles.rotate}>Tip: turn your phone sideways for a bigger field.</p>
+        <p className={styles.rotate}>{t("rotate")}</p>
       </div>
     </Chapter>
   );

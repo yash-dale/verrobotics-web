@@ -8,6 +8,8 @@ import { WaterFx } from "@/lib/waterFx";
 type Props = {
   /** anchor id used by the nav (#vision, #products …) */
   id: string;
+  /** accessible name of the section (its nav label) */
+  label: string;
   /** background colour of the previous section: what the spray washes away */
   prev: string;
   /** this section's background colour */
@@ -24,7 +26,7 @@ type Props = {
  * The sweep is tied to scroll position (no scroll-jacking: the page scrolls normally,
  * the section just sticks for a moment while the boom passes).
  */
-export default function Chapter({ id, prev, bg, fg = "#f3e9d8", dot = "rgba(255,255,255,0.045)", children }: Props) {
+export default function Chapter({ id, label, prev, bg, fg = "#f3e9d8", dot = "rgba(255,255,255,0.045)", children }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
@@ -159,7 +161,7 @@ export default function Chapter({ id, prev, bg, fg = "#f3e9d8", dot = "rgba(255,
   } as CSSProperties;
 
   return (
-    <section className={styles.chapter} style={vars} aria-label={id}>
+    <section className={styles.chapter} style={vars} aria-label={label}>
       <div ref={trackRef} className={styles.track} data-chapter="">
         <span id={id} className={styles.anchor} aria-hidden="true" />
         <div ref={stageRef} className={styles.stage}>
