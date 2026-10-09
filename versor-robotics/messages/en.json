@@ -66,6 +66,7 @@
     "title": "Pick your player<dot>.</dot>",
     "lede": "Two machines, one fleet. Slot them into your season like cartridges into a cabinet.",
     "cta": "Request a demo",
+    "simulator": "Try the spray simulator",
     "items": {
       "carrier": {
         "kind": "Collaborative mobile robot",
@@ -200,10 +201,20 @@
   "footer": {
     "top": "Back to top",
     "nav": "Footer",
-    "tagline": "Grown, not mined."
+    "tagline": "Grown, not mined.",
+    "simulator": "Spray simulator"
   },
   "rover": {
     "hint": "Grab me!"
+  },
+  "simulator": {
+    "metaTitle": "Spray simulator | Versor Robotics",
+    "metaDescription": "Try the Spray-Runner's spray rig in your browser: change the mast, nozzles, pump and speed, and see live whether every plant gets sprayed.",
+    "title": "Spray simulator<dot>.</dot>",
+    "intro": "Play with the Spray-Runner's spray rig: move the mast, switch nozzles on and off, change the pump, speed and crop, and watch live whether every plant gets its dose.",
+    "englishNote": "The simulator's own labels and numbers are in English.",
+    "loading": "Loading the simulator…",
+    "back": "Back to the machines"
   },
   "notFound": {
     "title": "Off the map<dot>.</dot>",

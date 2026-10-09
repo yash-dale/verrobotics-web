@@ -1,6 +1,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import styles from "./Footer.module.css";
 import { RoverBot } from "./illustrations/Bots";
+import { Link } from "@/i18n/navigation";
 import { localePath, type Locale } from "@/i18n/routing";
 import { nav, site } from "@/lib/site";
 
@@ -21,6 +22,7 @@ export default function Footer() {
               {tn(id)}
             </a>
           ))}
+          <Link href="/simulator">{t("simulator")}</Link>
         </nav>
         <p className={styles.copy}>
           &copy; {new Date().getFullYear()} <span lang="en">{site.name}</span>. {t("tagline")}

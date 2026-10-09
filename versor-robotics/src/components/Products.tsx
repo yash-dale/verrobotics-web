@@ -1,9 +1,10 @@
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Chapter from "./Chapter";
 import Reveal from "./Reveal";
 import { CarrierBot, SprayerBot } from "./illustrations/Bots";
 import styles from "./Products.module.css";
+import { Link } from "@/i18n/navigation";
 import { kicker, rich } from "@/i18n/rich";
 import { C } from "@/lib/palette";
 import { products } from "@/lib/site";
@@ -60,9 +61,17 @@ export default function Products() {
                         </li>
                       ))}
                     </ul>
-                    <a href="#contact" className="btn btn--amber">
-                      {t("cta")}
-                    </a>
+                    <div className={styles.actions}>
+                      <a href="#contact" className="btn btn--amber">
+                        {t("cta")}
+                      </a>
+                      {p.id === "spray" ? (
+                        <Link href="/simulator" className={styles.simLink}>
+                          {t("simulator")}
+                          <ArrowRight size={16} aria-hidden="true" />
+                        </Link>
+                      ) : null}
+                    </div>
                   </div>
                 </article>
               </Reveal>

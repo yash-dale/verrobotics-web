@@ -1,0 +1,12 @@
+/* holds the simulator's place (same light background) while its code loads */
+.loading {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 16px;
+  background: #f3e9d8;
+  color: #5c6662;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+}
